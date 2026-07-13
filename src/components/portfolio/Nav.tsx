@@ -10,6 +10,7 @@ const links = [
   { href: "#skills", label: "Skills" },
   { href: "#work", label: "Projects" },
   { href: "#certifications", label: "Certifications" },
+  { href: "#milestones", label: "Milestones" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -79,13 +80,13 @@ export function Nav({ isLoaded = false }: NavProps) {
     damping: 18,
     mass: 0.8,
     opacity: { duration: 0.25 },
-  };
+  } as const;
 
   const easeTransition = {
     type: "tween",
     ease: "easeInOut",
     duration: 0.3,
-  };
+  } as const;
 
   return (
     <motion.header

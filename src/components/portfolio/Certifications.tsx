@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView, HTMLMotionProps } from "framer-motion";
 import { SectionLabel } from "./About";
 import { playCertSlideSound } from "@/lib/sound";
 import {
@@ -160,7 +160,7 @@ function CountUp({
 }
 
 // 3D Tilt Card wrapper
-interface TiltCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface TiltCardProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;
 }
 
@@ -507,7 +507,7 @@ export function Certifications() {
         {/* ==================================================
             ACHIEVEMENTS SECTION
             ================================================== */}
-        <div ref={achievementsRef} className="border-t border-white/10 pt-24 mt-8">
+        <div id="milestones" ref={achievementsRef} className="border-t border-white/10 pt-24 mt-8">
           <div className="flex flex-col items-center text-center mb-16">
             <SectionLabel index="06" label="Milestones" />
             <div className="overflow-hidden mt-6">
