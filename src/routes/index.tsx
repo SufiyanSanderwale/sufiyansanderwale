@@ -13,15 +13,7 @@ import { Experience } from "@/components/portfolio/Experience";
 import { Certifications } from "@/components/portfolio/Certifications";
 import { Contact, Footer } from "@/components/portfolio/Contact";
 import { ProgressIndicator } from "@/components/portfolio/ProgressIndicator";
-import heroImg from "@/assets/hero-sufiyan.png";
-
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { property: "og:image", content: heroImg },
-      { name: "twitter:image", content: heroImg },
-    ],
-  }),
   component: Index,
 });
 

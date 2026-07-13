@@ -18,8 +18,8 @@ import { playClickSound } from "@/lib/sound";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const socials = [
-  { icon: Github, label: "GitHub", href: "https://github.com/sufiyansanderwale" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/sufiyansanderwale" },
+  { icon: Github, label: "GitHub", href: "https://github.com/SufiyanSanderwale" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/sufiyan-sanderwale" },
   { icon: Mail, label: "Email", href: "mailto:sufiyansanderwale54@gmail.com" },
 ];
 

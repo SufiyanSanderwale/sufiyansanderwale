@@ -66,46 +66,58 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        title: "Sufiyan Sanderwale | Software Developer | Java Developer | AI Enthusiast",
+        title: "Sufiyan Sanderwale | Java & Software Engineer | India",
       },
       {
         name: "description",
         content:
-          "Portfolio of Sufiyan Sanderwale showcasing Java development, AI-powered projects, modern web applications, and software engineering skills.",
+          "Explore the portfolio of Sufiyan Sanderwale, a Java Developer & Software Engineer. Discover key projects, technical skills, and professional certifications.",
       },
       {
         name: "keywords",
         content:
-          "Software Developer, Java Developer, Full Stack Developer, AI Developer, Next.js Portfolio, React Portfolio, Tailwind CSS, Java, Spring Boot, TypeScript, Belagavi, India",
+          "Java Developer, Software Engineer, Portfolio, India, Sufiyan Sanderwale, Full Stack Developer, Spring Boot, React, SQL, Belagavi",
       },
       { name: "author", content: "Sufiyan Sanderwale" },
+      { name: "robots", content: "index, follow" },
+      { name: "theme-color", content: "#050505" },
       {
         property: "og:title",
-        content: "Sufiyan Sanderwale | Software Developer | Java Developer | AI Enthusiast",
+        content: "Sufiyan Sanderwale | Java & Software Engineer | India",
       },
       {
         property: "og:description",
         content:
-          "Portfolio of Sufiyan Sanderwale showcasing Java development, AI-powered projects, modern web applications, and software engineering skills.",
+          "Explore the portfolio of Sufiyan Sanderwale, a Java Developer & Software Engineer. Discover key projects, technical skills, and professional certifications.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://sufiyansanderwale.vercel.app/" },
+      { property: "og:image", content: "https://sufiyansanderwale.vercel.app/hero-sufiyan.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:site_name", content: "Sufiyan Sanderwale Portfolio" },
+      { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:url", content: "https://sufiyansanderwale.vercel.app/" },
       {
         name: "twitter:title",
-        content: "Sufiyan Sanderwale | Software Developer | Java Developer | AI Enthusiast",
+        content: "Sufiyan Sanderwale | Java & Software Engineer | India",
       },
       {
         name: "twitter:description",
         content:
-          "Portfolio of Sufiyan Sanderwale showcasing Java development, AI-powered projects, modern web applications, and software engineering skills.",
+          "Explore the portfolio of Sufiyan Sanderwale, a Java Developer & Software Engineer. Discover key projects, technical skills, and professional certifications.",
       },
+      { name: "twitter:image", content: "https://sufiyansanderwale.vercel.app/hero-sufiyan.png" },
+      { name: "twitter:creator", content: "@MyselfSufiyan" },
+      { name: "twitter:site", content: "@MyselfSufiyan" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       {
         rel: "canonical",
-        href: "https://ais-pre-lg5ygp5srq452fo2dfourl-210735912082.asia-southeast1.run.app/",
+        href: "https://sufiyansanderwale.vercel.app/",
       },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -129,7 +141,19 @@ function RootShell({ children }: { children: ReactNode }) {
       "@type": "Person",
       name: "Sufiyan Sanderwale",
       jobTitle: "Software Developer",
-      url: "https://ais-pre-lg5ygp5srq452fo2dfourl-210735912082.asia-southeast1.run.app/",
+      url: "https://sufiyansanderwale.vercel.app/",
+      image: "https://sufiyansanderwale.vercel.app/hero-sufiyan.png",
+      description:
+        "Portfolio of Sufiyan Sanderwale, a Java Developer & Software Engineer based in India.",
+      knowsAbout: [
+        "Java",
+        "Spring Boot",
+        "Software Engineering",
+        "SQL",
+        "Web Development",
+        "React",
+        "TypeScript",
+      ],
       address: {
         "@type": "PostalAddress",
         addressLocality: "Belagavi",
@@ -140,13 +164,17 @@ function RootShell({ children }: { children: ReactNode }) {
         "@type": "EducationalOrganization",
         name: "Maratha Mandal Engineering College, Belagavi",
       },
-      sameAs: ["https://github.com/sufiyansanderwale", "https://linkedin.com/in/sufiyansanderwale"],
+      sameAs: [
+        "https://github.com/SufiyanSanderwale",
+        "https://www.linkedin.com/in/sufiyan-sanderwale",
+        "https://x.com/MyselfSufiyan",
+      ],
     },
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: "Sufiyan Sanderwale Portfolio",
-      url: "https://ais-pre-lg5ygp5srq452fo2dfourl-210735912082.asia-southeast1.run.app/",
+      url: "https://sufiyansanderwale.vercel.app/",
     },
     {
       "@context": "https://schema.org",
@@ -156,7 +184,7 @@ function RootShell({ children }: { children: ReactNode }) {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://ais-pre-lg5ygp5srq452fo2dfourl-210735912082.asia-southeast1.run.app/",
+          item: "https://sufiyansanderwale.vercel.app/",
         },
       ],
     },
