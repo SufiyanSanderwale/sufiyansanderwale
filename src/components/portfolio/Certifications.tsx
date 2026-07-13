@@ -85,7 +85,7 @@ const certs: Certification[] = [
 
 // Achievements Stats Data
 const stats = [
-  { value: 3, suffix: "+", label: "Projects", icon: Flame, color: "from-violet-500 to-blue-500" },
+  { value: 5, suffix: "+", label: "Projects", icon: Flame, color: "from-violet-500 to-blue-500" },
   {
     value: 1,
     suffix: "",
@@ -101,7 +101,7 @@ const stats = [
     color: "from-cyan-500 to-blue-500",
   },
   {
-    value: 1,
+    value: 3,
     suffix: "",
     label: "Live Production Site",
     icon: Monitor,
@@ -509,7 +509,7 @@ export function Certifications() {
             ================================================== */}
         <div ref={achievementsRef} className="border-t border-white/10 pt-24 mt-8">
           <div className="flex flex-col items-center text-center mb-16">
-            <SectionLabel index="05" label="Milestones" />
+            <SectionLabel index="06" label="Milestones" />
             <div className="overflow-hidden mt-6">
               <motion.h2
                 initial={{ y: "100%" }}
@@ -518,9 +518,9 @@ export function Certifications() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white uppercase"
               >
-                OUR{" "}
+                CAREER{" "}
                 <span className="bg-gradient-to-r from-violet-500 to-blue-500 bg-clip-text text-transparent">
-                  ACHIEVEMENTS
+                  MILESTONES
                 </span>
               </motion.h2>
             </div>

@@ -475,7 +475,7 @@ export function Contact() {
 
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16 md:mb-24">
-          <SectionLabel index="06" label="Get In Touch" />
+          <SectionLabel index="07" label="Get In Touch" />
 
           <div className="overflow-hidden mt-6">
             <motion.h2
