@@ -114,38 +114,44 @@ function CountUp({
   end,
   suffix = "",
   prefix = "",
+  start,
 }: {
   end: number;
   suffix?: string;
   prefix?: string;
+  start: boolean;
 }) {
   const [count, setCount] = useState(0);
-  const elementRef = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(elementRef, { once: true, margin: "-100px" });
+  const hasStartedRef = useRef(false);
+  const animationFrameRef = useRef(0);
+  const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 1.5; // seconds
-    const totalFrames = 60;
-    const increment = end / totalFrames;
-    const frameDuration = (duration * 1000) / totalFrames;
+    if (!start || hasStartedRef.current) return;
+    hasStartedRef.current = true;
+    startTimeRef.current = null;
 
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(timer);
+    const duration = 1500;
+
+    const animate = (timestamp: number) => {
+      if (startTimeRef.current === null) startTimeRef.current = timestamp;
+      const elapsed = Math.min(timestamp - startTimeRef.current, duration);
+      const progress = elapsed / duration;
+      setCount(Math.floor(progress * end));
+
+      if (elapsed < duration) {
+        animationFrameRef.current = requestAnimationFrame(animate);
       } else {
-        setCount(Math.floor(start));
+        setCount(end);
       }
-    }, frameDuration);
+    };
 
-    return () => clearInterval(timer);
-  }, [end, isInView]);
+    animationFrameRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameRef.current);
+  }, [end, start]);
 
   return (
-    <span ref={elementRef} className="tabular-nums">
+    <span className="tabular-nums">
       {prefix}
       {count}
       {suffix}
@@ -210,6 +216,8 @@ export function Certifications() {
   const [isHoveringCarousel, setIsHoveringCarousel] = useState(false);
 
   const carouselContainerRef = useRef<HTMLDivElement>(null);
+  const achievementsRef = useRef<HTMLDivElement>(null);
+  const sectionInView = useInView(achievementsRef, { once: true, margin: "-80px" });
   const isCarouselInView = useInView(carouselContainerRef, { margin: "-50px" });
 
   // Auto scroll functionality for desktop
@@ -499,7 +507,7 @@ export function Certifications() {
         {/* ==================================================
             ACHIEVEMENTS SECTION
             ================================================== */}
-        <div className="border-t border-white/10 pt-24 mt-8">
+        <div ref={achievementsRef} className="border-t border-white/10 pt-24 mt-8">
           <div className="flex flex-col items-center text-center mb-16">
             <SectionLabel index="05" label="Milestones" />
             <div className="overflow-hidden mt-6">
@@ -549,7 +557,7 @@ export function Certifications() {
 
                   <div className="mt-8">
                     <h3 className="text-4xl md:text-5xl font-black font-display tracking-tight text-white flex items-baseline">
-                      <CountUp end={stat.value} suffix={stat.suffix} />
+                      <CountUp end={stat.value} suffix={stat.suffix} start={sectionInView} />
                     </h3>
                     <p className="text-xs md:text-sm font-medium text-muted mt-2">{stat.label}</p>
                   </div>
