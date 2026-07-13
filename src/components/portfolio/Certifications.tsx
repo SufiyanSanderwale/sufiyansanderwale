@@ -162,10 +162,14 @@ function TiltCard({ children, className, ...props }: TiltCardProps) {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const boxRef = useRef<DOMRect | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const box = card.getBoundingClientRect();
+    let box = boxRef.current;
+    if (!box) {
+      box = e.currentTarget.getBoundingClientRect();
+      boxRef.current = box;
+    }
     const x = e.clientX - box.left - box.width / 2;
     const y = e.clientY - box.top - box.height / 2;
     // Max 10 degrees tilt
@@ -175,6 +179,7 @@ function TiltCard({ children, className, ...props }: TiltCardProps) {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    boxRef.current = null;
     setRotateX(0);
     setRotateY(0);
   };
@@ -205,17 +210,18 @@ export function Certifications() {
   const [isHoveringCarousel, setIsHoveringCarousel] = useState(false);
 
   const carouselContainerRef = useRef<HTMLDivElement>(null);
+  const isCarouselInView = useInView(carouselContainerRef, { margin: "-50px" });
 
   // Auto scroll functionality for desktop
   useEffect(() => {
-    if (isHoveringCarousel || activeCert) return;
+    if (isHoveringCarousel || activeCert || !isCarouselInView) return;
 
     const timer = setInterval(() => {
       setCarouselIndex((prev) => (prev + 1) % certs.length);
-    }, 1500);
+    }, 1000);
 
     return () => clearInterval(timer);
-  }, [isHoveringCarousel, activeCert]);
+  }, [isHoveringCarousel, activeCert, isCarouselInView]);
 
   const handlePrev = () => {
     playCertSlideSound();

@@ -5,6 +5,7 @@ import {
   useTransform,
   useScroll,
   AnimatePresence,
+  useInView,
 } from "framer-motion";
 import { ArrowDown, Download, Eye, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -39,6 +40,7 @@ export function Hero({ isLoaded = false }: HeroProps) {
   const tY = useTransform(sy, [-1, 1], [-18, 18]);
 
   const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { margin: "100px" });
   const { scrollY } = useScroll();
   const portraitScale = useTransform(scrollY, [0, 600], [1, 1.08]);
   const headingY = useTransform(scrollY, [0, 600], [0, 80]);
@@ -53,21 +55,35 @@ export function Hero({ isLoaded = false }: HeroProps) {
         setHasScrolled(true);
       }
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
+    let rect: DOMRect | null = null;
+    const updateRect = () => {
+      if (ref.current) {
+        rect = ref.current.getBoundingClientRect();
+      }
+    };
+
+    updateRect();
+    window.addEventListener("resize", updateRect, { passive: true });
+    window.addEventListener("scroll", updateRect, { passive: true });
+
     const onMove = (e: MouseEvent) => {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
+      if (!rect) return;
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
       mx.set(Math.max(-1, Math.min(1, (e.clientX - cx) / (rect.width / 2))));
       my.set(Math.max(-1, Math.min(1, (e.clientY - cy) / (rect.height / 2))));
     };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect);
+      window.removeEventListener("mousemove", onMove);
+    };
   }, [mx, my]);
 
   const headingWords = ["HI,", "I'M", "SUFIYAN"];
@@ -104,6 +120,7 @@ export function Hero({ isLoaded = false }: HeroProps) {
 
         {/* Small floating particles */}
         {isLoaded &&
+          isInView &&
           Array.from({ length: 14 }).map((_, i) => (
             <motion.span
               key={i}
@@ -346,6 +363,7 @@ export function Hero({ isLoaded = false }: HeroProps) {
 
               {/* Layer 4: Soft floating particles behind the image for magical depth */}
               {isLoaded &&
+                isInView &&
                 Array.from({ length: 6 }).map((_, i) => (
                   <motion.span
                     key={`inner-particle-${i}`}

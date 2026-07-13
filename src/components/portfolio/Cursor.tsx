@@ -41,30 +41,31 @@ export function Cursor() {
       if (!target) return;
 
       const hoverable = target.closest("a, button, [data-cursor], [role='button']");
+      let nextText: string | null = null;
       if (hoverable) {
         // Decide appropriate text
         const explicitAttr = hoverable.getAttribute("data-cursor");
         if (explicitAttr) {
-          setCursorText(explicitAttr.toUpperCase());
+          nextText = explicitAttr.toUpperCase();
         } else if (hoverable.closest("#work") && hoverable.tagName === "A") {
-          setCursorText("VIEW");
+          nextText = "VIEW";
         } else if (hoverable.getAttribute("target") === "_blank") {
-          setCursorText("OPEN");
+          nextText = "OPEN";
         } else {
-          setCursorText("CLICK");
+          nextText = "CLICK";
         }
-      } else {
-        setCursorText(null);
       }
+
+      setCursorText((prev) => (prev === nextText ? prev : nextText));
     };
 
     const onLeave = () => {
       setCursorText(null);
     };
 
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseover", onOver);
-    document.addEventListener("mouseleave", onLeave);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mouseover", onOver, { passive: true });
+    document.addEventListener("mouseleave", onLeave, { passive: true });
 
     return () => {
       document.head.removeChild(style);

@@ -119,11 +119,28 @@ function CanvasParticles() {
       height = canvas.height = canvas.offsetHeight;
     };
 
-    window.addEventListener("resize", handleResize);
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("resize", handleResize, { passive: true });
+    canvas.addEventListener("mousemove", handleMouseMove, { passive: true });
+    canvas.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            cancelAnimationFrame(animationFrameId);
+            draw();
+          }
+        });
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(canvas);
 
     const draw = () => {
+      if (!isVisible) return;
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "rgba(139, 92, 246, 0.15)";
       ctx.strokeStyle = "rgba(139, 92, 246, 0.05)";
@@ -178,6 +195,7 @@ function CanvasParticles() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
       if (canvas) {
         canvas.removeEventListener("mousemove", handleMouseMove);
@@ -209,10 +227,14 @@ function ContactCard({
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const boxRef = useRef<DOMRect | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const box = card.getBoundingClientRect();
+    let box = boxRef.current;
+    if (!box) {
+      box = e.currentTarget.getBoundingClientRect();
+      boxRef.current = box;
+    }
     const x = e.clientX - box.left - box.width / 2;
     const y = e.clientY - box.top - box.height / 2;
     setRotateX(-y / (box.height / 25)); // scale tilt degree
@@ -221,6 +243,7 @@ function ContactCard({
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    boxRef.current = null;
     setRotateX(0);
     setRotateY(0);
   };

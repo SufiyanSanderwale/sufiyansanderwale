@@ -66,7 +66,7 @@ export function Nav({ isLoaded = false }: NavProps) {
       }
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

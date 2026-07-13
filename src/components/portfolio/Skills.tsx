@@ -5,6 +5,7 @@ import {
   useTransform,
   useAnimationFrame,
   MotionValue,
+  useInView,
 } from "framer-motion";
 import { useState, useRef, useEffect, memo } from "react";
 
@@ -688,6 +689,8 @@ function TechItem({
 /* ---------- Interactive Vertical Tech Showcase ---------- */
 
 export function TechShowcase() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { margin: "100px" });
   const [dimensions, setDimensions] = useState({
     containerHeight: 450,
     itemHeight: 106,
@@ -711,11 +714,13 @@ export function TechShowcase() {
       }
     };
     updateDimensions();
-    window.addEventListener("resize", updateDimensions);
+    window.addEventListener("resize", updateDimensions, { passive: true });
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   useAnimationFrame((time, delta) => {
+    if (!isInView) return;
+
     // Constant smooth speed scrolling
     const speed = 35; // px per sec
     const currentY = y.get();
@@ -758,7 +763,10 @@ export function TechShowcase() {
     dimensions.containerHeight === 450 ? 90 : dimensions.containerHeight === 380 ? 70 : 52;
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-12 lg:gap-16 w-full select-none">
+    <div
+      ref={containerRef}
+      className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-12 lg:gap-16 w-full select-none"
+    >
       {/* Active Tech Name and Details display - Apple Vision Pro style HUD */}
       <div className="flex flex-col items-center md:items-start text-center md:text-left min-w-[200px] h-[70px] md:h-auto justify-center md:justify-start pb-2 md:pb-0">
         <div className="text-[10px] uppercase tracking-[0.28em] text-accent font-medium mb-1.5 opacity-80">

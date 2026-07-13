@@ -88,8 +88,12 @@ export function Lightweight3DScene({ active = false }: Lightweight3DSceneProps) 
     const focalLength = 320;
     const cameraDistance = 250;
 
+    let isVisible = true;
+
     // Render loop
     const render = () => {
+      if (!isVisible) return;
+
       ctx.clearRect(0, 0, width, height);
 
       // Interpolate mouse rotations for smooth lag effect
@@ -192,12 +196,26 @@ export function Lightweight3DScene({ active = false }: Lightweight3DSceneProps) 
       animationId = requestAnimationFrame(render);
     };
 
+    // Use IntersectionObserver to start/stop rendering based on viewport visibility
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          render();
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(canvas);
+
     render();
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
       cancelAnimationFrame(animationId);
+      observer.disconnect();
     };
   }, []);
 

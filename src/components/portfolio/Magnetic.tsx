@@ -20,10 +20,21 @@ export function Magnetic({ children, range = 70, strength = 0.35 }: MagneticProp
     const el = ref.current;
     if (!el) return;
 
+    let rect: DOMRect | null = null;
+
+    const updateRect = () => {
+      rect = el.getBoundingClientRect();
+    };
+
+    window.addEventListener("scroll", updateRect, { passive: true });
+    window.addEventListener("resize", updateRect, { passive: true });
+
     const onMove = (e: MouseEvent) => {
-      const { left, top, width, height } = el.getBoundingClientRect();
-      const cx = left + width / 2;
-      const cy = top + height / 2;
+      if (!rect) {
+        rect = el.getBoundingClientRect();
+      }
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
@@ -38,14 +49,17 @@ export function Magnetic({ children, range = 70, strength = 0.35 }: MagneticProp
     };
 
     const onLeave = () => {
+      rect = null;
       x.set(0);
       y.set(0);
     };
 
-    window.addEventListener("mousemove", onMove);
-    el.addEventListener("mouseleave", onLeave);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    el.addEventListener("mouseleave", onLeave, { passive: true });
 
     return () => {
+      window.removeEventListener("scroll", updateRect);
+      window.removeEventListener("resize", updateRect);
       window.removeEventListener("mousemove", onMove);
       el.removeEventListener("mouseleave", onLeave);
     };

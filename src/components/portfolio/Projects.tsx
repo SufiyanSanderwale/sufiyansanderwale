@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { SectionLabel } from "./About";
 import { playClickSound } from "@/lib/sound";
@@ -423,6 +423,7 @@ function ProjectCardWrapper({
           scale,
           opacity,
           filter: blurValue,
+          willChange: "transform, opacity, filter",
         }}
         animate={{
           scale: isMatch ? 1 : 0.98,
@@ -591,7 +592,13 @@ function ProjectCardWrapper({
   );
 }
 
-function MacbookMockup({ images, title }: { images: string[]; title: string }) {
+const MacbookMockup = memo(function MacbookMockup({
+  images,
+  title,
+}: {
+  images: string[];
+  title: string;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -649,9 +656,15 @@ function MacbookMockup({ images, title }: { images: string[]; title: string }) {
       )}
     </div>
   );
-}
+});
 
-function BrowserMockup({ images, title }: { images: string[]; title: string }) {
+const BrowserMockup = memo(function BrowserMockup({
+  images,
+  title,
+}: {
+  images: string[];
+  title: string;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -713,7 +726,7 @@ function BrowserMockup({ images, title }: { images: string[]; title: string }) {
       )}
     </div>
   );
-}
+});
 
 function ProjectTimeline({
   timeline,

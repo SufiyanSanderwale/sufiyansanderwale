@@ -203,16 +203,22 @@ function ProfileCard() {
   const ref = useRef<HTMLDivElement>(null);
   const rx = useSpring(useMotionValue(0), { stiffness: 120, damping: 15 });
   const ry = useSpring(useMotionValue(0), { stiffness: 120, damping: 15 });
+  const rectRef = useRef<DOMRect | null>(null);
 
   const onMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
+    let r = rectRef.current;
+    if (!r) {
+      if (!ref.current) return;
+      r = ref.current.getBoundingClientRect();
+      rectRef.current = r;
+    }
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
     ry.set(x * 10);
     rx.set(-y * 10);
   };
   const onLeave = () => {
+    rectRef.current = null;
     rx.set(0);
     ry.set(0);
   };
