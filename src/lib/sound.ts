@@ -27,7 +27,8 @@ export function playClickSound() {
 
     if (!clickAudio) {
       clickAudio = new Audio(buttonSound);
-      clickAudio.volume = 0.35; // pleasant, balanced volume level
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      clickAudio.volume = isMobile ? 0.75 : 0.40; // pleasant, balanced volume level
     } else {
       // Reset playback position if it's already playing or finished
       clickAudio.currentTime = 0;
