@@ -1,0 +1,16 @@
+{
+  "name": "Sufiyan Sanderwale | Portfolio",
+  "short_name": "Sufiyan",
+  "description": "Portfolio of Sufiyan Sanderwale showcasing Java development, AI-powered projects, modern web applications, and software engineering.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
