@@ -1,5 +1,9 @@
 <div align="center">
-   <img src="https://raw.githubusercontent.com/SufiyanSanderwale/sufiyansanderwale/main/src/assets/hero-sufiyan.png" alt="Sufiyan Sanderwale Banner" width="100%">
+  <div align="center">
+  <img src="https://raw.githubusercontent.com/SufiyanSanderwale/sufiyansanderwale/main/src/assets/hero-sufiyan.png"
+       alt="Sufiyan Sanderwale"
+       width="320">
+</div>
   # 🌟 Sufiyan Sanderwale
   ### 💻 Java Developer | Software Developer | Open To Work
 
