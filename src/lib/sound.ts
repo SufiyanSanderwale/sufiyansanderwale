@@ -28,7 +28,7 @@ export function playClickSound() {
     if (!clickAudio) {
       clickAudio = new Audio(buttonSound);
       const isMobile = window.matchMedia("(max-width: 768px)").matches;
-      clickAudio.volume = isMobile ? 1.2 : 0.37; // pleasant, balanced volume level
+      clickAudio.volume = isMobile ? 1.4 : 0.37; // pleasant, balanced volume level
     } else {
       // Reset playback position if it's already playing or finished
       clickAudio.currentTime = 0;
@@ -53,7 +53,7 @@ export function playNavClickSound() {
 
     if (!navAudio) {
       navAudio = new Audio(navSound);
-      navAudio.volume = 0.19; // pleasant, balanced volume level
+      navAudio.volume = 0.12; // pleasant, balanced volume level
     } else {
       // Reset playback position if it's already playing or finished
       navAudio.currentTime = 0;
