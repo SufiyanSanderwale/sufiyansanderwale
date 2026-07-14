@@ -10,7 +10,7 @@ import {
 import { ArrowDown, Download, Eye, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import heroImg from "@/assets/hero-sufiyan.png";
-import resume from "@/assets/resume.pdf";
+
 import { Magnetic } from "./Magnetic";
 import { Lightweight3DScene } from "./Lightweight3DScene";
 import { playClickSound } from "@/lib/sound";
@@ -214,7 +214,7 @@ export function Hero({ isLoaded = false }: HeroProps) {
           >
             <Magnetic range={50} strength={0.3}>
               <a
-                href={resume}
+                href="/Sufiyan_Sanderwale_Resume.pdf"
                 download="Sufiyan_Sanderwale_Resume.pdf"
                 onClick={playClickSound}
                 className="btn-primary btn-primary-hover group"

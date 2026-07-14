@@ -19,7 +19,6 @@ import {
   Sparkles,
   ChevronUp,
 } from "lucide-react";
-import resume from "@/assets/resume.pdf";
 
 // Contact Details from Resume
 const contactDetails = {
@@ -541,7 +540,7 @@ export function Contact() {
             <div className="mt-4 flex justify-start">
               <Magnetic>
                 <a
-                  href={resume}
+                  href="/Sufiyan_Sanderwale_Resume.pdf"
                   download="Sufiyan_Sanderwale_Resume.pdf"
                   onClick={playClickSound}
                   className="relative group/resume inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-blue-600 font-semibold text-white border border-white/10 shadow-glow-purple cursor-pointer select-none overflow-hidden hover:scale-105 transition-all duration-300"
@@ -813,7 +812,7 @@ export function Footer() {
                 </Magnetic>
                 <Magnetic>
                   <a
-                    href={resume}
+                    href="/Sufiyan_Sanderwale_Resume.pdf"
                     download="Sufiyan_Sanderwale_Resume.pdf"
                     className="flex h-9 w-9 items-center justify-center rounded-xl glass border border-white/10 hover:border-violet-500/40 text-muted hover:text-white transition-all group/icon"
                     title="Resume"
