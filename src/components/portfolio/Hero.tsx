@@ -215,8 +215,7 @@ export function Hero({ isLoaded = false }: HeroProps) {
             <Magnetic range={50} strength={0.3}>
               <a
                 href={resume}
-                target="_blank"
-                rel="noreferrer"
+                download="Sufiyan_Sanderwale_Resume.pdf"
                 onClick={playClickSound}
                 className="btn-primary btn-primary-hover group"
               >
