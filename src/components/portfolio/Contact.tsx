@@ -118,9 +118,23 @@ function CanvasParticles() {
       height = canvas.height = canvas.offsetHeight;
     };
 
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+    let isScrolling = false;
+    let scrollTimeout: number;
+    const handleScroll = () => {
+      isScrolling = true;
+      clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        isScrolling = false;
+      }, 120);
+    };
+
     window.addEventListener("resize", handleResize, { passive: true });
     canvas.addEventListener("mousemove", handleMouseMove, { passive: true });
     canvas.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+    if (isMobile) {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+    }
 
     let isVisible = true;
     const observer = new IntersectionObserver(
@@ -140,6 +154,12 @@ function CanvasParticles() {
 
     const draw = () => {
       if (!isVisible) return;
+
+      if (isMobile && isScrolling) {
+        animationFrameId = requestAnimationFrame(draw);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "rgba(139, 92, 246, 0.15)";
       ctx.strokeStyle = "rgba(139, 92, 246, 0.05)";
@@ -196,6 +216,10 @@ function CanvasParticles() {
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
       window.removeEventListener("resize", handleResize);
+      if (isMobile) {
+        window.removeEventListener("scroll", handleScroll);
+        clearTimeout(scrollTimeout);
+      }
       if (canvas) {
         canvas.removeEventListener("mousemove", handleMouseMove);
         canvas.removeEventListener("mouseleave", handleMouseLeave);

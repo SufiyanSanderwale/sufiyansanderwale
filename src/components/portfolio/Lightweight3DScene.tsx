@@ -46,6 +46,21 @@ export function Lightweight3DScene({ active = false }: Lightweight3DSceneProps) 
     resize();
     window.addEventListener("resize", resize);
 
+    // Track scroll state on mobile to pause animation loop and optimize paint performance
+    let isScrolling = false;
+    let scrollTimeout: number;
+    const handleScroll = () => {
+      isScrolling = true;
+      clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        isScrolling = false;
+      }, 120);
+    };
+
+    if (isMobile) {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+    }
+
     // Generate points on a sphere (Fibonacci lattice for perfectly even distribution)
     const points: Point3D[] = [];
     const sphereRadius = isMobile ? 65 : 100;
@@ -93,6 +108,12 @@ export function Lightweight3DScene({ active = false }: Lightweight3DSceneProps) 
     // Render loop
     const render = () => {
       if (!isVisible) return;
+
+      // Throttle rendering on mobile when scrolling to achieve butter-smooth scrolling
+      if (isMobile && isScrolling) {
+        animationId = requestAnimationFrame(render);
+        return;
+      }
 
       ctx.clearRect(0, 0, width, height);
 
@@ -214,6 +235,10 @@ export function Lightweight3DScene({ active = false }: Lightweight3DSceneProps) 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
+      if (isMobile) {
+        window.removeEventListener("scroll", handleScroll);
+        clearTimeout(scrollTimeout);
+      }
       cancelAnimationFrame(animationId);
       observer.disconnect();
     };

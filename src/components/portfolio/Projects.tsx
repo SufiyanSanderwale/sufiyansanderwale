@@ -622,6 +622,7 @@ const MacbookMockup = memo(function MacbookMockup({
               animate={{ opacity: activeIndex === i ? 1 : 0 }}
               transition={{ duration: 0.5 }}
               className="absolute inset-0 w-full h-full object-cover object-top hover:scale-[1.03] transition-transform duration-700"
+              loading="lazy"
             />
           ))}
         </div>
@@ -649,7 +650,7 @@ const MacbookMockup = memo(function MacbookMockup({
                   : "border-white/10 hover:border-white/40"
               }`}
             >
-              <img src={img} className="w-full h-full object-cover object-top" />
+              <img src={img} className="w-full h-full object-cover object-top" loading="lazy" />
             </button>
           ))}
         </div>
@@ -698,6 +699,7 @@ const BrowserMockup = memo(function BrowserMockup({
               animate={{ opacity: activeIndex === i ? 1 : 0 }}
               transition={{ duration: 0.5 }}
               className="absolute inset-0 w-full h-full object-cover object-top hover:scale-[1.03] transition-transform duration-700"
+              loading="lazy"
             />
           ))}
         </div>
@@ -719,7 +721,7 @@ const BrowserMockup = memo(function BrowserMockup({
                   : "border-white/10 hover:border-white/40"
               }`}
             >
-              <img src={img} className="w-full h-full object-cover object-top" />
+              <img src={img} className="w-full h-full object-cover object-top" loading="lazy" />
             </button>
           ))}
         </div>

@@ -383,6 +383,7 @@ export function Certifications() {
                               src={cert.img}
                               alt={cert.title}
                               className="w-full h-full object-cover object-top"
+                              loading="lazy"
                             />
                             {/* Hover Eye Overlay */}
                             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
@@ -456,6 +457,7 @@ export function Certifications() {
                         src={cert.img}
                         alt={cert.title}
                         className="w-full h-full object-cover object-top"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <Eye size={20} className="text-white" />

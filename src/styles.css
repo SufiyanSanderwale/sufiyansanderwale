@@ -238,3 +238,10 @@ body {
   animation: pulseGlow 3s ease-in-out infinite;
   will-change: opacity;
 }
+
+@media (pointer: coarse) {
+  .animate-blob-a,
+  .animate-blob-b {
+    animation: none !important;
+  }
+}
