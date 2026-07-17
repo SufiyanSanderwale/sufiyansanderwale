@@ -6,6 +6,7 @@ import {
   useAnimationFrame,
   MotionValue,
   useInView,
+  animate,
 } from "framer-motion";
 import { useState, useRef, useEffect, memo } from "react";
 
@@ -614,7 +615,7 @@ function CategoryCard({
   );
 }
 
-function TechItem({
+const TechItem = memo(function TechItem({
   tech,
   onActive,
   variant,
@@ -684,7 +685,8 @@ function TechItem({
       {tech.name}
     </button>
   );
-}
+});
+TechItem.displayName = "TechItem";
 
 /* ---------- Interactive Vertical Tech Showcase ---------- */
 
@@ -718,46 +720,79 @@ export function TechShowcase() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  useAnimationFrame((time, delta) => {
+  const scrollIndexRef = useRef(0);
+
+  // Auto scroll functionality using step-based spring transitions
+  useEffect(() => {
     if (!isInView) return;
 
-    // Constant smooth speed scrolling
-    const speed = 35; // px per sec
-    const currentY = y.get();
-    const totalHeight = techItems.length * dimensions.itemHeight;
+    const timer = setInterval(() => {
+      scrollIndexRef.current += 1;
+      const targetY = -scrollIndexRef.current * dimensions.itemHeight;
+      animate(y, targetY, {
+        type: "spring",
+        stiffness: 300,
+        damping: 28,
+        restDelta: 0.1,
+      });
+    }, 1000);
 
-    // delta cap to prevent giant jumps when tab is inactive
-    const safeDelta = Math.min(delta, 100);
-    let nextY = currentY - speed * (safeDelta / 1000);
-    if (nextY <= -totalHeight) {
-      nextY += totalHeight;
-    }
-    y.set(nextY);
+    return () => clearInterval(timer);
+  }, [isInView, dimensions.itemHeight, y]);
 
-    // Calculate active item based on the center of the viewport (wrapped)
-    const containerCenter = dimensions.containerHeight / 2;
-    let closestIndex = 0;
-    let minDistance = Infinity;
+  // Sync animation position immediately when dimensions/itemHeight change
+  useEffect(() => {
+    const targetY = -scrollIndexRef.current * dimensions.itemHeight;
+    animate(y, targetY, {
+      type: "spring",
+      stiffness: 300,
+      damping: 28,
+      restDelta: 0.1,
+    });
+  }, [dimensions.itemHeight, y]);
 
-    for (let i = 0; i < techItems.length; i++) {
-      const rawY = nextY + i * dimensions.itemHeight;
-      const wrappedY =
-        ((((rawY + dimensions.itemHeight) % totalHeight) + totalHeight) % totalHeight) -
-        dimensions.itemHeight;
-      const cardCenterY = wrappedY + dimensions.itemHeight / 2;
-      const distance = Math.abs(cardCenterY - containerCenter);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIndex = i;
+  // Update selected tech HUD display only when y changes (eliminating useAnimationFrame CPU overhead)
+  useEffect(() => {
+    const handleYChange = (latestY: number) => {
+      const totalHeight = techItems.length * dimensions.itemHeight;
+      const containerCenter = dimensions.containerHeight / 2;
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      for (let i = 0; i < techItems.length; i++) {
+        const rawY = latestY + i * dimensions.itemHeight;
+        const wrappedY =
+          ((((rawY + dimensions.itemHeight) % totalHeight) + totalHeight) % totalHeight) -
+          dimensions.itemHeight;
+        const cardCenterY = wrappedY + dimensions.itemHeight / 2;
+        const distance = Math.abs(cardCenterY - containerCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
       }
-    }
 
-    const activeItem = techItems[closestIndex];
-    if (activeItem && activeItem.name !== activeTechRef.current.name) {
-      activeTechRef.current = activeItem;
-      setActiveTech(activeItem);
-    }
-  });
+      const activeItem = techItems[closestIndex];
+      if (activeItem && activeItem.name !== activeTechRef.current.name) {
+        activeTechRef.current = activeItem;
+        setActiveTech(activeItem);
+      }
+    };
+
+    // Run once initially to capture current position state
+    handleYChange(y.get());
+
+    // Subscribe to MotionValue changes
+    const unsubscribe = y.on ? y.on("change", handleYChange) : (y as any).onChange(handleYChange);
+
+    return () => {
+      if (typeof unsubscribe === "function") {
+        unsubscribe();
+      } else if (unsubscribe && (unsubscribe as any).destroy) {
+        (unsubscribe as any).destroy();
+      }
+    };
+  }, [dimensions, y]);
 
   const cardSize =
     dimensions.containerHeight === 450 ? 90 : dimensions.containerHeight === 380 ? 70 : 52;

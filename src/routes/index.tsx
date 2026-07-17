@@ -20,31 +20,66 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Initialize smooth momentum scrolling (Lenis) for desktop devices
+  // Initialize smooth momentum scrolling (Lenis) for desktop devices and handle instant navbar jumps
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.8,
-    });
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+    let lenis: Lenis | null = null;
+
+    if (!isMobile) {
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: "vertical",
+        gestureOrientation: "vertical",
+        smoothWheel: true,
+        wheelMultiplier: 0.95,
+        touchMultiplier: 1.8,
+      });
+
+      // Expose lenis globally for components like ProgressIndicator
+      (window as any).lenis = lenis;
+    }
 
     let rafId = 0;
-    function raf(time: number) {
-      lenis.raf(time);
+    if (lenis) {
+      const raf = (time: number) => {
+        lenis!.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
       rafId = requestAnimationFrame(raf);
     }
-    rafId = requestAnimationFrame(raf);
+
+    // Handle local anchor link clicks: jump instantly to target section
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest("a");
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      if (href && href.startsWith("#")) {
+        e.preventDefault();
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          if (lenis) {
+            lenis.scrollTo(targetElement, { immediate: true });
+          } else {
+            targetElement.scrollIntoView({ behavior: "auto" });
+          }
+          // Update URL hash without native browser jump scroll
+          window.history.pushState(null, "", href);
+        }
+      }
+    };
+
+    document.addEventListener("click", handleAnchorClick);
 
     return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
+      if (rafId) cancelAnimationFrame(rafId);
+      document.removeEventListener("click", handleAnchorClick);
+      (window as any).lenis = undefined;
+      if (lenis) lenis.destroy();
     };
   }, []);
 

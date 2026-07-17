@@ -48,7 +48,12 @@ export function ProgressIndicator() {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.scrollTo(el);
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 

@@ -37,7 +37,7 @@ export function Magnetic({ children, range = 70, strength = 0.35 }: MagneticProp
       const cy = rect.top + rect.height / 2;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
-      const dist = Math.hypot(dx, dy);
+      const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < range) {
         x.set(dx * strength);

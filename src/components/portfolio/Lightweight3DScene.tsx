@@ -165,7 +165,7 @@ export function Lightweight3DScene({ active = false }: Lightweight3DSceneProps) 
           const dx = pt3d1.x - pt3d2.x;
           const dy = pt3d1.y - pt3d2.y;
           const dz = pt3d1.z - pt3d2.z;
-          const distance3d = Math.hypot(dx, dy, dz);
+          const distance3d = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance3d < maxDistance) {
             const lineOpacity =
